@@ -35,12 +35,13 @@ public class RegistrationFunctionalTest extends BaseTest{
     @Story("User can registration with parameter offer from web-form")
     @ParameterizedTest(name = "firstName = {0}, lastName = {1}, email = {2}, phoneNumber = {3}")
     @MethodSource("com.appside.ui.dataProvider.DataProviderRegistrationPage#userCanRegistration")
-    public void userCanRegistrationWithParameterOfferInScript(String firstName, String lastName, String email, String phoneNumber){
+    public void userCanRegistrationWithParameterOfferInScript(User user){
         pageRegistration = new PageRegistration(driver);
         String expectedText = "Success";
 
         String textOnTheSuccessPage = pageRegistration.openPageRegistration(localUrl(appConfig.pageWithOffer()))
-                .registrationWithValidData(firstName, lastName, email, phoneNumber).getTextOnTheSuccessPage();
+                .registrationWithValidData(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber())
+                .getTextOnTheSuccessPage();
 
         assertThat(textOnTheSuccessPage).isEqualTo(expectedText);
     }
@@ -49,12 +50,12 @@ public class RegistrationFunctionalTest extends BaseTest{
     @Story("User can not registration with parameter group from web-form")
     @ParameterizedTest(name = "firstName = {0}, lastName = {1}, email = {2}, phoneNumber = {3}, errorMessage = {4}")
     @MethodSource("com.appside.ui.dataProvider.DataProviderRegistrationPage#userCanNotRegistration")
-    public void userCanNotRegistrationWithParameterGroupInScript(String firstName, String lastName, String email,
-                                                                 String phoneNumber, String errorMessage){
+    public void userCanNotRegistrationWithParameterGroupInScript(User user, String errorMessage){
         pageRegistration = new PageRegistration(driver);
 
         String alertText = pageRegistration.openPageRegistration(localUrl(appConfig.pageWithGroup()))
-                .registrationWithNotValidData(firstName, lastName, email, phoneNumber).getAlertText().trim();
+                .registrationWithNotValidData(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber())
+                .getAlertText().trim();
 
         pageRegistration.acceptAlert();
         boolean isAlertPresent = pageRegistration.isAlertPresent();
@@ -69,12 +70,12 @@ public class RegistrationFunctionalTest extends BaseTest{
     @Story("User can not registration with parameter offer from web-form")
     @ParameterizedTest(name = "firstName = {0}, lastName = {1}, email = {2}, phoneNumber = {3}, errorMessage = {4}")
     @MethodSource("com.appside.ui.dataProvider.DataProviderRegistrationPage#userCanNotRegistration")
-    public void userCanNotRegistrationWithParameterOfferInScript(String firstName, String lastName, String email,
-                                                                 String phoneNumber, String errorMessage){
+    public void userCanNotRegistrationWithParameterOfferInScript(User user, String errorMessage){
         pageRegistration = new PageRegistration(driver);
 
         String alertText = pageRegistration.openPageRegistration(localUrl(appConfig.pageWithOffer()))
-                .registrationWithNotValidData(firstName, lastName, email, phoneNumber).getAlertText().trim();
+                .registrationWithNotValidData(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhoneNumber())
+                .getAlertText().trim();
 
         pageRegistration.acceptAlert();
         boolean isAlertPresent = pageRegistration.isAlertPresent();
